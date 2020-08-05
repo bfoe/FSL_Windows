@@ -1,0 +1,772 @@
+unchanged:
+--- fsl/src/asl_mfree/asl_mfree.cc	2019-11-19 07:45:41.000000000 -0300
++++ fsl_patched/src/asl_mfree/asl_mfree.cc	2020-08-01 11:48:33.319119300 -0300
+@@ -246,3 +246,3 @@
+-            volume4D<float> stdout;
+-            stdout.setmatrix(magstd.AsMatrix(1, nvox), mask);
+-            save_volume4D(stdout, opts.outname.value() + "_stddev");
++            volume4D<float> stddevout;
++            stddevout.setmatrix(magstd.AsMatrix(1, nvox), mask);
++            save_volume4D(stddevout, opts.outname.value() + "_stddev");
+unchanged:
+--- fsl/src/asl_mfree/Makefile	2019-11-19 07:23:14.000000000 -0300
++++ fsl_patched/src/asl_mfree/Makefile	2020-08-01 16:56:37.362059100 -0300
+@@ -20 +20 @@
+-LIBS = -lutils -lnewimage -lmiscmaths -lm ${MATLIB} ${NIFTILIB} -lprob -lznz -lz
++LIBS = -lutils -lnewimage -lmiscmaths -lm ${MATLIB} ${NIFTILIB} -lprob -lznz -lz -llapack -lblas
+unchanged:
+--- fsl/src/avwutils/Makefile	2019-10-24 09:54:26.000000000 -0300
++++ fsl_patched/src/avwutils/Makefile	2020-07-30 17:04:45.985546700 -0300
+@@ -9 +9 @@
+-LIBS = -lnewimage -lmiscmaths -lprob -lNewNifti -lnewmat -lutils -lznz -lm -lz
++LIBS = -lnewimage -lmiscmaths -lprob -lNewNifti -lnewmat -lutils -lznz -lm -lz -llapack -lblas
+unchanged:
+--- fsl/src/bet2/Makefile	2019-09-27 11:42:00.000000000 -0300
++++ fsl_patched/src/bet2/Makefile	2020-07-30 19:20:26.765315400 -0300
+@@ -12 +12 @@
+-LIBS=-lfirst_lib -lfslvtkio -lmeshclass -lnewimage -lmiscmaths -lNewNifti -lznz -lnewmat -lutils -lz
++LIBS=-lfirst_lib -lfslvtkio -lmeshclass -lnewimage -lmiscmaths -lNewNifti -lznz -lnewmat -lutils -lz -llapack -lblas
+unchanged:
+--- fsl/src/bint/Makefile	2019-01-24 13:13:24.000000000 -0200
++++ fsl_patched/src/bint/Makefile	2020-08-02 06:10:13.147726800 -0300
+@@ -8 +8 @@
+-LIBS = -lutils -lnewimage -lmiscmaths -lm -lnewmat -lNewNifti -lznz -lprob -lz
++LIBS = -lutils -lnewimage -lmiscmaths -lm -lnewmat -lNewNifti -lznz -lprob -lz -llapack -lblas
+unchanged:
+--- fsl/src/CiftiLib-master/Cifti/CiftiFile.cxx	2016-10-19 10:17:55.000000000 -0200
++++ fsl_patched/src/CiftiLib-master/Cifti/CiftiFile.cxx	2020-07-31 11:05:48.485571800 -0300
+@@ -85 +85 @@
+-        return filesystem::absolute(AString_to_std_string(mypath)).native();
++        return filesystem::absolute(AString_to_std_string(mypath)).string();
+@@ -101 +101 @@
+-        return filesystem::canonical(temp).native();
++        return filesystem::canonical(temp).string();
+unchanged:
+--- fsl/src/CiftiLib-master/Makefile	2016-10-19 10:17:55.000000000 -0200
++++ fsl_patched/src/CiftiLib-master/Makefile	2020-08-03 21:03:58.727742800 -0300
+@@ -16 +16 @@
+-LIBS = -lcifti -lxml++-2.6 -lxml2 -lboost_filesystem -lboost_system -liconv -lz -lm 
++LIBS = -lcifti -lxml++-2.6 -lxml2 -lboost_filesystem-mt -lboost_system-mt -liconv -lz -lm 
+unchanged:
+--- fsl/src/cluster/Makefile	2017-04-19 07:17:54.000000000 -0300
++++ fsl_patched/src/cluster/Makefile	2020-07-30 20:47:50.259981700 -0300
+@@ -8 +8 @@
+-LIBS = -lutils -lwarpfns -lbasisfield -lnewimage -lmiscmaths -lprob -lNewNifti -lznz -lnewmat -lz
++LIBS = -lutils -lwarpfns -lbasisfield -lnewimage -lmiscmaths -lprob -lNewNifti -lznz -lnewmat -lz -llapack -lblas
+@@ -19 +19 @@
+-CLIBS = -lutils -lwarpfns -lbasisfield -lnewimage -lmiscmaths -lNewNifti -lznz -lnewmat -lprob -lz
++CLIBS = -lutils -lwarpfns -lbasisfield -lnewimage -lmiscmaths -lNewNifti -lznz -lnewmat -lprob -lz -llapack -lblas
+unchanged:
+--- fsl/src/CUDIMOT/Makefile	2018-12-20 20:30:56.000000000 -0200
++++ fsl_patched/src/CUDIMOT/Makefile	2020-08-03 21:28:32.174368600 -0300
+@@ -96 +96 @@
+-	${CXX} ${CXXFLAGS} $(USRINCFLAGS) ${LDFLAGS} -o $@ $(DIR_objs)/cudimotoptions.o $(DIR_objs)/link_cudimot_gpu.o split_parts.cc ${DLIBS} $(CUDIMOT_CUDA_OBJS) -lcudart -lboost_filesystem -lboost_system -L${CUDA}/lib64 -L${CUDA}/lib
++	${CXX} ${CXXFLAGS} $(USRINCFLAGS) ${LDFLAGS} -o $@ $(DIR_objs)/cudimotoptions.o $(DIR_objs)/link_cudimot_gpu.o split_parts.cc ${DLIBS} $(CUDIMOT_CUDA_OBJS) -lcudart -lboost_filesystem-mt -lboost_system-mt -L${CUDA}/lib64 -L${CUDA}/lib
+@@ -99 +99 @@
+-	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ $(DIR_objs)/cudimotoptions.o $(DIR_objs)/link_cudimot_gpu.o merge_parts.cc ${DLIBS} $(CUDIMOT_CUDA_OBJS) -lcudart -lboost_filesystem -lboost_system -L${CUDA}/lib64 -L${CUDA}/lib
++	${CXX} ${CXXFLAGS} ${LDFLAGS} -o $@ $(DIR_objs)/cudimotoptions.o $(DIR_objs)/link_cudimot_gpu.o merge_parts.cc ${DLIBS} $(CUDIMOT_CUDA_OBJS) -lcudart -lboost_filesystem-mt -lboost_system-mt -L${CUDA}/lib64 -L${CUDA}/lib
+unchanged:
+--- fsl/src/fabber_core/fabber_core.cc	2019-11-19 07:45:20.000000000 -0300
++++ fsl_patched/src/fabber_core/fabber_core.cc	2020-07-31 06:02:02.146671300 -0300
+@@ -126 +126 @@
+-        int errcode = getenv_s(&envsize, NULL, 0, name);
++        int errcode = atoi(getenv(name));
+unchanged:
+--- fsl/src/fabber_core/Makefile	2019-11-19 07:34:24.000000000 -0300
++++ fsl_patched/src/fabber_core/Makefile	2020-07-31 02:04:35.435281300 -0300
+@@ -20 +20 @@
+-LIBS = -lutils -lnewimage -lmiscmaths -lprob ${MATLIB} ${NIFTILIB} -lznz -lz -ldl
++LIBS = -lutils -lnewimage -lmiscmaths -lprob ${MATLIB} ${NIFTILIB} -lznz -lz -ldl -llapack -lblas
+unchanged:
+--- fsl/src/fabber_models_asl/Makefile	2019-11-19 07:34:27.000000000 -0300
++++ fsl_patched/src/fabber_models_asl/Makefile	2020-07-31 06:11:48.501545700 -0300
+@@ -20 +20 @@
+-LIBS = -lutils -lnewimage -lmiscmaths -lprob ${MATLIB} ${NIFTILIB} -lznz -lz -ldl
++LIBS = -lutils -lnewimage -lmiscmaths -lprob ${MATLIB} ${NIFTILIB} -lznz -lz -ldl -llapack -lblas
+unchanged:
+--- fsl/src/fabber_models_cest/Makefile	2019-11-19 07:34:29.000000000 -0300
++++ fsl_patched/src/fabber_models_cest/Makefile	2020-07-31 06:14:11.696209000 -0300
+@@ -20 +20 @@
+-LIBS = -lutils -lnewimage -lmiscmaths -lprob ${MATLIB} ${NIFTILIB} -lznz -lz -ldl
++LIBS = -lutils -lnewimage -lmiscmaths -lprob ${MATLIB} ${NIFTILIB} -lznz -lz -ldl -llapack -lblas
+unchanged:
+--- fsl/src/fabber_models_dce/Makefile	2019-11-19 07:34:31.000000000 -0300
++++ fsl_patched/src/fabber_models_dce/Makefile	2020-07-31 06:14:38.682270000 -0300
+@@ -20 +20 @@
+-LIBS = -lutils -lnewimage -lmiscmaths -lprob ${MATLIB} ${NIFTILIB} -lznz -lz -ldl
++LIBS = -lutils -lnewimage -lmiscmaths -lprob ${MATLIB} ${NIFTILIB} -lznz -lz -ldl -llapack -lblas
+unchanged:
+--- fsl/src/fabber_models_dsc/Makefile	2019-11-19 07:34:33.000000000 -0300
++++ fsl_patched/src/fabber_models_dsc/Makefile	2020-07-31 06:14:53.686313500 -0300
+@@ -20 +20 @@
+-LIBS = -lutils -lnewimage -lmiscmaths -ldscprob ${MATLIB} ${NIFTILIB} -lznz -lz -ldl
++LIBS = -lutils -lnewimage -lmiscmaths -ldscprob ${MATLIB} ${NIFTILIB} -lznz -lz -ldl -llapack -lblas
+unchanged:
+--- fsl/src/fabber_models_dualecho/Makefile	2019-11-19 07:34:35.000000000 -0300
++++ fsl_patched/src/fabber_models_dualecho/Makefile	2020-07-31 06:15:10.778360400 -0300
+@@ -20 +20 @@
+-LIBS = -lutils -lnewimage -lmiscmaths -lprob ${MATLIB} ${NIFTILIB} -lznz -lz -ldl
++LIBS = -lutils -lnewimage -lmiscmaths -lprob ${MATLIB} ${NIFTILIB} -lznz -lz -ldl -llapack -lblas
+unchanged:
+--- fsl/src/fabber_models_dwi/Makefile	2019-11-19 07:34:37.000000000 -0300
++++ fsl_patched/src/fabber_models_dwi/Makefile	2020-07-31 06:15:22.830400300 -0300
+@@ -20 +20 @@
+-LIBS = -lutils -lnewimage -lmiscmaths -lprob ${MATLIB} ${NIFTILIB} -lznz -lz -ldl
++LIBS = -lutils -lnewimage -lmiscmaths -lprob ${MATLIB} ${NIFTILIB} -lznz -lz -ldl -llapack -lblas
+unchanged:
+--- fsl/src/fabber_models_qbold/Makefile	2019-11-19 07:34:40.000000000 -0300
++++ fsl_patched/src/fabber_models_qbold/Makefile	2020-07-31 06:15:35.844440000 -0300
+@@ -20 +20 @@
+-LIBS = -lutils -lnewimage -lmiscmaths ${MATLIB} ${NIFTILIB} -lznz -lz -ldl
++LIBS = -lutils -lnewimage -lmiscmaths ${MATLIB} ${NIFTILIB} -lznz -lz -ldl -llapack -lblas
+unchanged:
+--- fsl/src/fabber_models_t1/Makefile	2019-11-19 07:34:39.000000000 -0300
++++ fsl_patched/src/fabber_models_t1/Makefile	2020-07-31 06:15:48.586480200 -0300
+@@ -20 +20 @@
+-LIBS = -lutils -lnewimage -lmiscmaths -lprob ${MATLIB} ${NIFTILIB} -lznz -lz -ldl
++LIBS = -lutils -lnewimage -lmiscmaths -lprob ${MATLIB} ${NIFTILIB} -lznz -lz -ldl -llapack -lblas
+unchanged:
+--- fsl/src/fast4/Makefile	2018-09-28 09:45:24.000000000 -0300
++++ fsl_patched/src/fast4/Makefile	2020-07-30 19:26:28.074687700 -0300
+@@ -10 +10 @@
+-LIBS = -lnewimage -lmiscmaths -lNewNifti -lutils -lnewmat -lznz -lm -lz
++LIBS = -lnewimage -lmiscmaths -lNewNifti -lutils -lnewmat -lznz -lm -lz -llapack -lblas
+unchanged:
+--- fsl/src/fdt/Makefile	2019-08-20 10:45:11.000000000 -0300
++++ fsl_patched/src/fdt/Makefile	2020-07-30 19:27:23.571290800 -0300
+@@ -13 +13 @@
+-DLIBS = -lwarpfns -lbasisfield -lmeshclass -lnewimage -lutils -lmiscmaths -lnewmat -lnewran -lNewNifti -lznz -lcprob -lprob -lm -lz
++DLIBS = -lwarpfns -lbasisfield -lmeshclass -lnewimage -lutils -lmiscmaths -lnewmat -lnewran -lNewNifti -lznz -lcprob -lprob -lm -lz -llapack -lblas
+unchanged:
+--- fsl/src/feat5/Makefile	2019-10-30 08:12:10.000000000 -0300
++++ fsl_patched/src/feat5/Makefile	2020-07-30 19:27:59.898588100 -0300
+@@ -9 +9 @@
+-LIBS = -lnewimage -lmiscplot -lmiscpic -lmiscmaths -lprob -lnewmat -lutils $(IOLIBS) -lm -lz  -lgdc -lgd -lpng
++LIBS = -lnewimage -lmiscplot -lmiscpic -lmiscmaths -lprob -lnewmat -lutils $(IOLIBS) -lm -lz  -lgdc -lgd -lpng -llapack -lblas
+unchanged:
+--- fsl/src/film/Makefile	2018-10-01 09:56:22.000000000 -0300
++++ fsl_patched/src/film/Makefile	2020-08-01 16:59:29.346369400 -0300
+@@ -8 +8 @@
+-LIBS = -lfslsurface -lfslvtkio -lmeshclass  -lfirst_lib -lnewimage -lmiscmaths -lutils -lm -lnewmat -lgiftiio -lNewNifti -lznz -lprob -lz -lexpat
++LIBS = -lfslsurface -lfslvtkio -lmeshclass  -lfirst_lib -lnewimage -lmiscmaths -lutils -lm -lnewmat -lgiftiio -lNewNifti -lznz -lprob -lz -lexpat -llapack -lblas
+unchanged:
+--- fsl/src/filmbabe/Makefile	2018-04-23 09:10:04.000000000 -0300
++++ fsl_patched/src/filmbabe/Makefile	2020-07-30 19:28:32.822904000 -0300
+@@ -8 +8 @@
+-LIBS = -lutils -lmiscplot -lmiscpic -lnewimage -lmiscmaths -lnewmat -lNewNifti -lprob -lgdc -lgd -lpng -lznz -lz -lm
++LIBS = -lutils -lmiscplot -lmiscpic -lnewimage -lmiscmaths -lnewmat -lNewNifti -lprob -lgdc -lgd -lpng -lznz -lz -lm -llapack -lblas
+unchanged:
+--- fsl/src/first/Makefile	2017-12-08 14:43:34.000000000 -0200
++++ fsl_patched/src/first/Makefile	2020-07-30 21:08:47.242622700 -0300
+@@ -12 +12 @@
+-LIBS= -lshapeModel -lfirst_lib -lfslvtkio -lmeshclass -lnewimage -lprob -lmiscmaths -lNewNifti -lznz -lnewmat  -lutils -lz 
++LIBS= -lshapeModel -lfirst_lib -lfslvtkio -lmeshclass -lnewimage -lprob -lmiscmaths -lNewNifti -lznz -lnewmat  -lutils -lz -llapack -lblas
+@@ -14 +14 @@
+-FMBLIBS= -lnewimage -lmiscmaths -lNewNifti -lznz -lnewmat  -lutils -lz 
++FMBLIBS= -lnewimage -lmiscmaths -lNewNifti -lznz -lnewmat  -lutils -lz -llapack -lblas
+unchanged:
+--- fsl/src/flameo/Makefile	2018-10-02 10:46:58.000000000 -0300
++++ fsl_patched/src/flameo/Makefile	2020-08-03 22:06:51.550202500 -0300
+@@ -5 +5 @@
+-USRINCFLAGS = -I${INC_NEWMAT} -I${INC_PROB} -I${INC_ZLIB} -DCIFTILIB_USE_XMLPP -I${FSLEXTINC} -I${INC_XML2} -I${INC_XML++} -I${INC_XML++CONF} -I${INC_BOOST} -I${FSLDIR}/include/ciftiio
++USRINCFLAGS = -I${INC_NEWMAT} -I${INC_PROB} -I${INC_ZLIB} -I${FSLEXTINC} -I${INC_XML2} -DCIFTILIB_USE_XMLPP -I${INC_XML++} -I${INC_XML++CONF} -I${INC_BOOST} -I${FSLDIR}/include/ciftiio
+@@ -13 +13,7 @@
+-LIBS += -lutils -lnewimage -lmiscmaths -lm -lnewmat -lNewNifti -lcifti -lxml++-2.6 -lxml2 -lboost_filesystem -lboost_system -lznz -lprob -lz 
++LIBS += -lutils -lnewimage -lmiscmaths -lm -lnewmat -lNewNifti -lcifti -lxml++-2.6 -lxml2 -lboost_filesystem-mt -lboost_system-mt -lznz -lprob -lz -llapack -lblas
++
++UNAME := $(shell uname)
++ifeq ($(findstring MINGW, $(UNAME)), MINGW)
++        CXXFLAGS += -DIN_LIBXML 
++        LIBS += -liconv -lws2_32
++endif
+unchanged:
+--- fsl/src/flirt/Makefile	2019-08-23 15:11:09.000000000 -0300
++++ fsl_patched/src/flirt/Makefile	2020-07-30 06:05:53.795727900 -0300
+@@ -10 +10 @@
+-LIBS = -lwarpfns -lbasisfield -lnewimage -lmiscmaths -lNewNifti -lznz -lnewmat -lutils -lm -lz
++LIBS = -lwarpfns -lbasisfield -lnewimage -lmiscmaths -lNewNifti -lznz -lnewmat -lutils -lm -lz -llapack -lblas
+unchanged:
+--- fsl/src/fnirt/Makefile	2018-10-16 10:31:48.000000000 -0300
++++ fsl_patched/src/fnirt/Makefile	2020-07-30 19:38:17.316225000 -0300
+@@ -11 +11 @@
+-LIBS=-lwarpfns -lmeshclass -lbasisfield -lnewimage -lmiscmaths -lNewNifti -lznz -lutils -lnewmat -lm -lz
++LIBS=-lwarpfns -lmeshclass -lbasisfield -lnewimage -lmiscmaths -lNewNifti -lznz -lutils -lnewmat -lm -lz -llapack -lblas
+unchanged:
+--- fsl/src/fslsurface/fslsurfacemaths.cpp	2019-11-19 07:46:34.000000000 -0300
++++ fsl_patched/src/fslsurface/fslsurfacemaths.cpp	2020-07-30 15:52:29.380404200 -0300
+@@ -79,2 +79 @@
+-#ifdef __linux
+-#else
++#ifdef __APPLE__
+unchanged:
+--- fsl/src/fslsurface/Makefile	2014-12-16 12:52:05.000000000 -0200
++++ fsl_patched/src/fslsurface/Makefile	2020-07-31 03:28:57.344073800 -0300
+@@ -7,0 +8 @@
++ismingw = $(findstring mingw, $(FSLMACHTYPE))
+@@ -9,0 +11 @@
++    ifneq ($(ismingw),mingw)
+@@ -10,0 +13,5 @@
++    endif
++endif
++
++ifeq ($(ismingw),mingw)
++        FMLIBS += -lopengl32 -lglu32 -llapack -lblas 
+unchanged:
+--- fsl/src/fugue/Makefile	2019-04-05 06:49:07.000000000 -0300
++++ fsl_patched/src/fugue/Makefile	2020-07-30 19:38:44.242486800 -0300
+@@ -9 +9 @@
+-LIBS=-lwarpfns -lbasisfield -lmeshclass -lnewimage -lmiscmaths -lNewNifti -lznz -lnewmat -lutils -lz
++LIBS=-lwarpfns -lbasisfield -lmeshclass -lnewimage -lmiscmaths -lNewNifti -lznz -lnewmat -lutils -lz -llapack -lblas
+unchanged:
+--- fsl/src/gps/Makefile	2014-12-12 14:36:23.000000000 -0200
++++ fsl_patched/src/gps/Makefile	2020-07-30 19:39:06.249790900 -0300
+@@ -9 +9 @@
+-LIBS=-lmiscmaths -lNewNifti -lznz -lutils -lnewmat -lm -lz
++LIBS=-lmiscmaths -lNewNifti -lznz -lutils -lnewmat -lm -lz -llapack -lblas
+unchanged:
+--- fsl/src/lesions/lesion_filling.cc	2019-11-19 07:44:56.000000000 -0300
++++ fsl_patched/src/lesions/lesion_filling.cc	2020-08-01 16:53:12.926898900 -0300
+@@ -125 +125 @@
+-    int mrand=Max(Min(ceil((double(random())/MAXRAND)*(max-min+1)),(max-min+1)),1)+min-1;
++    int mrand=Max(Min(ceil((double(rand())/MAXRAND)*(max-min+1)),(max-min+1)),1)+min-1;
+unchanged:
+--- fsl/src/lesions/Makefile	2019-09-03 07:48:08.000000000 -0300
++++ fsl_patched/src/lesions/Makefile	2020-08-01 20:12:45.122409700 -0300
+@@ -10 +10 @@
+-LIBS = -lwarpfns -lbasisfield -lnewimage -lmiscmaths -lNewNifti -lznz -lnewmat -lutils -lm -lz
++LIBS = -lwarpfns -lbasisfield -lnewimage -lmiscmaths -lNewNifti -lznz -lnewmat -lutils -lm -lz -llapack -lblas
+unchanged:
+--- fsl/src/libmeshutils/Makefile	2014-12-16 12:20:18.000000000 -0200
++++ fsl_patched/src/libmeshutils/Makefile	2020-07-30 17:01:57.831584000 -0300
+@@ -27 +27 @@
+-LIBS+=-lfirst_lib -lshapeModel -lmeshclass -lnewimage -lmiscmaths -lprob -lNewNifti -lznz -lutils -lnewmat  -lz
++LIBS+=-lfirst_lib -lshapeModel -lmeshclass -lnewimage -lmiscmaths -lprob -lNewNifti -lznz -lutils -lnewmat  -lz -llapack -lblas
+unchanged:
+--- fsl/src/mcflirt/Log.cc	2019-11-19 07:47:11.000000000 -0300
++++ fsl_patched/src/mcflirt/Log.cc	2020-08-03 10:15:23.564013900 -0300
+@@ -88 +88 @@
+-	  if ( (ret = mkdir(dir.c_str(), 0770))!= 0){
++	  if ( (ret = mkdir(dir.c_str()))!= 0){
+unchanged:
+--- fsl/src/mcflirt/Makefile	2019-01-28 09:42:23.000000000 -0200
++++ fsl_patched/src/mcflirt/Makefile	2020-08-03 10:17:07.828604200 -0300
+@@ -11 +11 @@
+-LIBS = -lnewimage -lmiscmaths -lutils -lNewNifti -lznz -lnewmat -lprob -lm -lz
++LIBS = -lnewimage -lmiscmaths -lutils -lNewNifti -lznz -lnewmat -lprob -lm -lz -llapack -lblas
+unchanged:
+--- fsl/src/melodic/Makefile	2019-10-28 11:28:23.000000000 -0300
++++ fsl_patched/src/melodic/Makefile	2020-08-03 21:05:20.369965400 -0300
+@@ -10 +10 @@
+-USRINCFLAGS = -I${INC_NEWMAT} -I${INC_PROB} -I${INC_GD} -I${INC_GDC} -I${INC_PNG} -I${INC_ZLIB} -DCIFTILIB_USE_XMLPP -I${FSLEXTINC} -I${INC_XML2} -I${INC_XML++} -I${INC_XML++CONF} -I${INC_BOOST} -I${FSLDIR}/include/ciftiio
++USRINCFLAGS = -I${INC_NEWMAT} -I${INC_PROB} -I${INC_GD} -I${INC_GDC} -I${INC_PNG} -I${INC_ZLIB} -I${FSLEXTINC} -I${INC_XML2} -DCIFTILIB_USE_XMLPP -I${INC_XML++} -I${INC_XML++CONF} -I${INC_BOOST} -I${FSLDIR}/include/ciftiio 
+@@ -18 +18,7 @@
+-LIBS += -lutils -lnewimage -lmiscplot -lmiscpic -lmiscmaths -lNewNifti -lcifti -lxml++-2.6 -lxml2 -lboost_filesystem -lboost_system -lznz -lnewmat -lprob -lm  -lgdc -lgd -lpng -lz
++LIBS += -lutils -lnewimage -lmiscplot -lmiscpic -lmiscmaths -lNewNifti -lcifti -lxml++-2.6 -lxml2 -lboost_filesystem-mt -lboost_system-mt -lznz -lnewmat -lprob -lm  -lgdc -lgd -lpng -lz -llapack -lblas
++
++UNAME := $(shell uname)
++ifeq ($(findstring MINGW, $(UNAME)), MINGW)
++        CXXFLAGS += -DIN_LIBXML
++        LIBS += -liconv -lws2_32
++endif
+unchanged:
+--- fsl/src/melodic/meldata.cc	2019-11-19 07:47:08.000000000 -0300
++++ fsl_patched/src/melodic/meldata.cc	2020-08-03 10:36:13.970790700 -0300
+@@ -1018 +1018 @@
+-      if(in>0){
++      if(in.is_open()){
+unchanged:
+--- fsl/src/meshclass/Makefile	2014-12-15 15:21:46.000000000 -0200
++++ fsl_patched/src/meshclass/Makefile	2020-07-30 06:05:57.029736000 -0300
+@@ -9 +9 @@
+-LIBS=-lnewimage -lmiscmaths -lNewNifti -lznz -lnewmat -lutils -lz
++LIBS=-lnewimage -lmiscmaths -lNewNifti -lznz -lnewmat -lutils -lz -llapack -lblas
+unchanged:
+--- fsl/src/miscvis/Makefile	2019-08-12 10:51:47.000000000 -0300
++++ fsl_patched/src/miscvis/Makefile	2020-07-30 19:39:49.023106500 -0300
+@@ -9 +9 @@
+-LIBS = -lutils -lnewimage -lmiscplot -lmiscpic -lmiscmaths -lNewNifti -lznz -lnewmat -lprob -lm  -lgdc -lgd -lpng -lz
++LIBS = -lutils -lnewimage -lmiscplot -lmiscpic -lmiscmaths -lNewNifti -lznz -lnewmat -lprob -lm  -lgdc -lgd -lpng -lz -llapack -lblas
+unchanged:
+--- fsl/src/mist-clean/Makefile	2019-01-07 12:22:09.000000000 -0200
++++ fsl_patched/src/mist-clean/Makefile	2020-08-03 21:14:29.075950600 -0300
+@@ -26,2 +26,2 @@
+-			-lboost_log -lboost_log_setup -lboost_thread -lboost_filesystem -lboost_date_time -lboost_chrono \
+-			-lboost_system -lboost_serialization -lboost_regex -lwarpfns -lbasisfield -lnewimage -lmiscmaths \
++			-lboost_log-mt -lboost_log_setup-mt -lboost_thread-mt -lboost_filesystem-mt -lboost_date_time-mt -lboost_chrono-mt \
++			-lboost_system-mt -lboost_serialization-mt -lboost_regex-mt -lwarpfns -lbasisfield -lnewimage -lmiscmaths \
+unchanged:
+--- fsl/src/mm/Makefile	2019-09-20 14:54:36.000000000 -0300
++++ fsl_patched/src/mm/Makefile	2020-07-30 19:40:25.478418400 -0300
+@@ -8 +8 @@
+-LIBS = -lnewimage -lmiscmaths -lutils -lmiscplot -lmiscpic -lNewNifti -lznz -lm -lnewmat -lprob -lgdc -lgd -lpng -lz
++LIBS = -lnewimage -lmiscmaths -lutils -lmiscplot -lmiscpic -lNewNifti -lznz -lm -lnewmat -lprob -lgdc -lgd -lpng -lz -llapack -lblas
+unchanged:
+--- fsl/src/MSM/Makefile	2019-11-19 07:36:12.000000000 -0300
++++ fsl_patched/src/MSM/Makefile	2020-08-01 20:31:57.467473300 -0300
+@@ -8 +8 @@
+-LIBS= -lmeshreg -lfastpd -ldiscrete -lnewmeshclass -lfslsurface -lgiftiio -lmm -lexpat -lfslvtkio -lnewimage -lmiscmaths -lmiscplot -lmiscpic -lNewNifti -lutils  -lbint -lnewran -lprob -lznz -lgdc -lgd -lpng  -lz
++LIBS= -lmeshreg -lfastpd -ldiscrete -lnewmeshclass -lfslsurface -lgiftiio -lmm -lexpat -lfslvtkio -lnewimage -lmiscmaths -lmiscplot -lmiscpic -lNewNifti -lutils  -lbint -lnewran -lprob -lznz -lgdc -lgd -lpng  -lz -llapack -lblas
+@@ -16 +16 @@
+-	LIBS= -lmeshreg -lfastpd -ldiscrete -ltbb -lnewmeshclass -lfslsurface -lgiftiio -lmm -lexpat -lfslvtkio -lnewimage -lmiscmaths -lmiscplot -lmiscpic -lNewNifti -lutils  -lbint -lnewran -lprob -lznz -lgdc -lgd -lpng  -lz
++	LIBS= -lmeshreg -lfastpd -ldiscrete -ltbb -lnewmeshclass -lfslsurface -lgiftiio -lmm -lexpat -lfslvtkio -lnewimage -lmiscmaths -lmiscplot -lmiscpic -lNewNifti -lutils  -lbint -lnewran -lprob -lznz -lgdc -lgd -lpng  -lz 
+unchanged:
+--- fsl/src/newimage/newimage.h	2019-11-19 07:45:52.000000000 -0300
++++ fsl_patched/src/newimage/newimage.h	2020-07-30 03:03:26.752130700 -0300
+@@ -68,0 +69,4 @@
++#ifndef EXPOSE_TREACHEROUS
++#define EXPOSE_TREACHEROUS
++#endif    
++    
+unchanged:
+--- fsl/src/newmesh/featurespace.cc	2019-11-19 07:46:23.000000000 -0300
++++ fsl_patched/src/newmesh/featurespace.cc	2020-08-01 01:32:21.882221200 -0300
+@@ -75 +75 @@
+-  NEWMESH::newmesh featurespace::Initialize(const int &ico, vector<NEWMESH::newmesh> &IN,const bool & exclude){
++  NEWMESH::newmesh featurespace::Initialize(const int &ico, vector<NEWMESH::newmesh> &in,const bool & exclude){
+@@ -79,2 +79,2 @@
+-    if(IN.size()!=CMfile_in.size()){ throw  NEWMESHException(" NEWMESH::featurespace::Initialize do not have the same number of datasets and surface meshes");	}
+-    else {DATA.resize(IN.size(),boost::shared_ptr<BFMatrix > ()); }
++    if(in.size()!=CMfile_in.size()){ throw  NEWMESHException(" NEWMESH::featurespace::Initialize do not have the same number of datasets and surface meshes");	}
++    else {DATA.resize(in.size(),boost::shared_ptr<BFMatrix > ()); }
+@@ -86 +86 @@
+-    for (unsigned int i=0;i<IN.size();i++){
++    for (unsigned int i=0;i<in.size();i++){
+@@ -88,2 +88,2 @@
+-      bool isfunc=set_data(CMfile_in[i],DATA[i],IN[i],_issparse); 
+-      IN[i].set_pvalues(DATA[i]->AsMatrix());
++      bool isfunc=set_data(CMfile_in[i],DATA[i],in[i],_issparse); 
++      in[i].set_pvalues(DATA[i]->AsMatrix());
+@@ -91 +91 @@
+-      if(ico==0){icotmp=IN[i];} 
++      if(ico==0){icotmp=in[i];} 
+@@ -96 +96 @@
+-		NEWMESH::newmesh excl_tmp=create_exclusion(IN[i],DATA[i]->AsMatrix(),_fthreshold[0],_fthreshold[1]);
++		NEWMESH::newmesh excl_tmp=create_exclusion(in[i],DATA[i]->AsMatrix(),_fthreshold[0],_fthreshold[1]);
+@@ -103 +103 @@
+-      resample(_sigma_in[i],DATA[i],icotmp,IN[i],EXCL[i]);
++      resample(_sigma_in[i],DATA[i],icotmp,in[i],EXCL[i]);
+@@ -112 +112 @@
+-      for (unsigned int i=1;i<IN.size();i++){
++      for (unsigned int i=1;i<in.size();i++){
+@@ -118 +118 @@
+-		  for (unsigned int i=0;i<IN.size();i++){
++		  for (unsigned int i=0;i<in.size();i++){
+@@ -126 +126 @@
+-      for (unsigned int i=0;i<IN.size();i++)
++      for (unsigned int i=0;i<in.size();i++)
+@@ -131 +131 @@
+-      for (unsigned int i=0;i<IN.size();i++){
++      for (unsigned int i=0;i<in.size();i++){
+@@ -169 +169 @@
+-  void featurespace::smooth(NEWMESH::newmesh &IN, boost::shared_ptr<BFMatrix> &tmp, const double &_sigma)
++  void featurespace::smooth(NEWMESH::newmesh &in, boost::shared_ptr<BFMatrix> &tmp, const double &_sigma)
+@@ -174 +174 @@
+-    R.smooth_data(_sigma,tmp,IN);
++    R.smooth_data(_sigma,tmp,in);
+unchanged:
+--- fsl/src/newmesh/meshfns.cc	2019-11-19 07:46:24.000000000 -0300
++++ fsl_patched/src/newmesh/meshfns.cc	2020-08-01 01:31:34.442154800 -0300
+@@ -1045 +1045 @@
+-  void histogram_normalization(NEWMESH::newmesh  & IN, const NEWMESH::newmesh & REF,const string &excl_in,const string &excl_ref, int numbins){
++  void histogram_normalization(NEWMESH::newmesh  & in, const NEWMESH::newmesh & REF,const string &excl_in,const string &excl_ref, int numbins){
+@@ -1049 +1049 @@
+-    ColumnVector datain(IN.nvertices()),dataref(REF.nvertices());
++    ColumnVector datain(in.nvertices()),dataref(REF.nvertices());
+@@ -1051,2 +1051,2 @@
+-    for (int i=0;i<IN.nvertices();i++)
+-      datain(i+1)=IN.get_pvalue(i);
++    for (int i=0;i<in.nvertices();i++)
++      datain(i+1)=in.get_pvalue(i);
+@@ -1070,2 +1070,2 @@
+-    for (int i=1;i<=IN.nvertices();i++)
+-      IN.set_pvalue(i-1,datain(i));
++    for (int i=1;i<=in.nvertices();i++)
++      in.set_pvalue(i-1,datain(i));
+@@ -1076 +1076 @@
+-  void multivariate_histogram_normalization(BFMatrix &IN , BFMatrix & REF,boost::shared_ptr<NEWMESH::newmesh> EXCL_IN,boost::shared_ptr<NEWMESH::newmesh> EXCL_REF, bool rescale){
++  void multivariate_histogram_normalization(BFMatrix &in , BFMatrix & REF,boost::shared_ptr<NEWMESH::newmesh> EXCL_IN,boost::shared_ptr<NEWMESH::newmesh> EXCL_REF, bool rescale){
+@@ -1079 +1079 @@
+-    ColumnVector datain(IN.Ncols()),dataref(REF.Ncols());
++    ColumnVector datain(in.Ncols()),dataref(REF.Ncols());
+@@ -1081 +1081 @@
+-    ColumnVector excluded_in(IN.Ncols()); excluded_in=1;
++    ColumnVector excluded_in(in.Ncols()); excluded_in=1;
+@@ -1085 +1085 @@
+-    for(int d=1; d<=(int) IN.Nrows();d++){      
++    for(int d=1; d<=(int) in.Nrows();d++){      
+@@ -1087,2 +1087,2 @@
+-      for (unsigned int i=1;i<=IN.Ncols();i++){
+-	datain(i)=IN.Peek(d,i);
++      for (unsigned int i=1;i<=in.Ncols();i++){
++	datain(i)=in.Peek(d,i);
+@@ -1124,2 +1124,2 @@
+-      for (unsigned int i=1;i<=IN.Ncols();i++){
+-	IN.Set(d,i,datain(i));
++      for (unsigned int i=1;i<=in.Ncols();i++){
++	in.Set(d,i,datain(i));
+@@ -1131 +1131 @@
+-	  set_range(d,IN,excluded_in,max,min);
++	  set_range(d,in,excluded_in,max,min);
+@@ -1135 +1135 @@
+-	  get_range(d,IN,excluded_in,max,min);
++	  get_range(d,in,excluded_in,max,min);
+@@ -1284 +1284 @@
+-   bool check_for_intersections(const int ind, const double &eps, NEWMESH::newmesh &IN){  // not needed if we have negdet?
++   bool check_for_intersections(const int ind, const double &eps, NEWMESH::newmesh &in){  // not needed if we have negdet?
+@@ -1286 +1286 @@
+-    NEWMESH::Pt c = IN.get_coord(ind);
++    NEWMESH::Pt c = in.get_coord(ind);
+@@ -1292,2 +1292,2 @@
+-    NEWMESH::Triangle tr=IN.get_triangle_from_vertex(ind,0);
+-    c = IN.get_coord(ind);
++    NEWMESH::Triangle tr=in.get_triangle_from_vertex(ind,0);
++    c = in.get_coord(ind);
+@@ -1296,2 +1296,2 @@
+-    for (vector<int>::const_iterator j=IN.tIDbegin(ind) ; j!=IN.tIDend(ind); j++){
+-      NEWMESH::Triangle tr2=IN.get_triangle(*j);
++    for (vector<int>::const_iterator j=in.tIDbegin(ind) ; j!=in.tIDend(ind); j++){
++      NEWMESH::Triangle tr2=in.get_triangle(*j);
+@@ -1444 +1444 @@
+-  ColumnVector barycentricSurfaceGrad(const int &index,const NEWMESH::newmesh &IN)	     
++  ColumnVector barycentricSurfaceGrad(const int &index,const NEWMESH::newmesh &in)	     
+@@ -1455 +1455 @@
+-    point=IN.get_coord(index);
++    point=in.get_coord(index);
+@@ -1461 +1461 @@
+-    for (vector<int>::const_iterator j=IN.tIDbegin(index);j!=IN.tIDend(index); j++){
++    for (vector<int>::const_iterator j=in.tIDbegin(index);j!=in.tIDend(index); j++){
+@@ -1464 +1464 @@
+-      v0 = IN.get_triangle_vertex(*j,0);  v1 = IN.get_triangle_vertex(*j,1); v2 = IN.get_triangle_vertex(*j,2);
++      v0 = in.get_triangle_vertex(*j,0);  v1 = in.get_triangle_vertex(*j,1); v2 = in.get_triangle_vertex(*j,2);
+@@ -1466,3 +1466,3 @@
+-      n0 = IN.get_triangle_vertexID(*j,0);
+-      n1 = IN.get_triangle_vertexID(*j,1);
+-      n2=  IN.get_triangle_vertexID(*j,2);
++      n0 = in.get_triangle_vertexID(*j,0);
++      n1 = in.get_triangle_vertexID(*j,1);
++      n2=  in.get_triangle_vertexID(*j,2);
+@@ -1471,3 +1471,3 @@
+-      d0 = IN.get_pvalue(n0); // gets the similarity terms for these
+-      d1 = IN.get_pvalue(n1); 
+-      d2 = IN.get_pvalue(n2); 
++      d0 = in.get_pvalue(n0); // gets the similarity terms for these
++      d1 = in.get_pvalue(n1); 
++      d2 = in.get_pvalue(n2); 
+@@ -1842,3 +1842,3 @@
+-  NEWMESH::newmesh create_exclusion(NEWMESH::newmesh &IN,const Matrix & DATA,const float &thrl,const float &thru){
+-    Matrix cfweighting(1,IN.npvalues());
+-    NEWMESH::newmesh EXCL=IN;
++  NEWMESH::newmesh create_exclusion(NEWMESH::newmesh &in,const Matrix & DATA,const float &thrl,const float &thru){
++    Matrix cfweighting(1,in.npvalues());
++    NEWMESH::newmesh EXCL=in;
+@@ -1848 +1848 @@
+-    for (int i=1;i<=IN.npvalues();i++){
++    for (int i=1;i<=in.npvalues();i++){
+unchanged:
+--- fsl/src/newmesh/resampler.cc	2019-11-19 07:46:25.000000000 -0300
++++ fsl_patched/src/newmesh/resampler.cc	2020-08-01 01:27:30.221647200 -0300
+@@ -87,4 +87,4 @@
+- *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+- *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+- *  TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+- *  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.*/
++ *  fs NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
++ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER in AN ACTION OF CONTRACT,
++ *  TORT OR OTHERWISE, ARISING FROM, OUT OF OR in CONNECTION WITH THE
++ *  SOFTWARE OR THE USE OR OTHER DEALINGS in THE SOFTWARE.*/
+@@ -397 +397 @@
+-  void resampler::barycentric_interpolation(NEWMESH::newmesh &IN, const NEWMESH::newmesh  &ref, boost::shared_ptr<BFMatrix> &data, boost::shared_ptr<NEWMESH::newmesh> &EXCL, boost::shared_ptr<RELATIONS > _rel)
++  void resampler::barycentric_interpolation(NEWMESH::newmesh &in, const NEWMESH::newmesh  &ref, boost::shared_ptr<BFMatrix> &data, boost::shared_ptr<NEWMESH::newmesh> &EXCL, boost::shared_ptr<RELATIONS > _rel)
+@@ -404 +404 @@
+-    vector<map<int,double> > adapt=get_all_adap_barycentric_weights(IN,exclusion,EXCL,_rel);
++    vector<map<int,double> > adapt=get_all_adap_barycentric_weights(in,exclusion,EXCL,_rel);
+@@ -485 +485 @@
+-  vector<std::map<int,double> > resampler::get_all_adap_barycentric_weights(NEWMESH::newmesh &IN, NEWMESH::newmesh &ref,  boost::shared_ptr<NEWMESH::newmesh> &EXCL, boost::shared_ptr<RELATIONS > _rel){
++  vector<std::map<int,double> > resampler::get_all_adap_barycentric_weights(NEWMESH::newmesh &in, NEWMESH::newmesh &ref,  boost::shared_ptr<NEWMESH::newmesh> &EXCL, boost::shared_ptr<RELATIONS > _rel){
+@@ -491 +491 @@
+-    if(ref.nvertices() > IN.nvertices()){ang=guess_angular_spacing(IN.nvertices()); }
++    if(ref.nvertices() > in.nvertices()){ang=guess_angular_spacing(in.nvertices()); }
+@@ -493 +493 @@
+-    if(!_rel.get() || (_rel->Ncols()!=IN.nvertices() && _rel->Ncols()!=ref.nvertices())){ 
++    if(!_rel.get() || (_rel->Ncols()!=in.nvertices() && _rel->Ncols()!=ref.nvertices())){ 
+@@ -496 +496 @@
+-      REL = boost::shared_ptr<RELATIONS > ( new RELATIONS(ref,IN,ang));
++      REL = boost::shared_ptr<RELATIONS > ( new RELATIONS(ref,in,ang));
+@@ -500 +500 @@
+-	_reverseREL=boost::shared_ptr<RELATIONS > ( new RELATIONS (REL->invert_relations(IN,ref,ang)));
++	_reverseREL=boost::shared_ptr<RELATIONS > ( new RELATIONS (REL->invert_relations(in,ref,ang)));
+@@ -505 +505 @@
+- 	if(_method=="ADAP_BARY") _reverseREL=boost::shared_ptr<RELATIONS > ( new RELATIONS (_rel->invert_relations(IN,ref,ang)));
++ 	if(_method=="ADAP_BARY") _reverseREL=boost::shared_ptr<RELATIONS > ( new RELATIONS (_rel->invert_relations(in,ref,ang)));
+@@ -509 +509 @@
+-	REL=boost::shared_ptr<RELATIONS > ( new RELATIONS (_rel->invert_relations(ref,IN,ang)));
++	REL=boost::shared_ptr<RELATIONS > ( new RELATIONS (_rel->invert_relations(ref,in,ang)));
+@@ -512 +512 @@
+-    check_scale(IN,ref); 
++    check_scale(in,ref); 
+@@ -514 +514 @@
+-    forward=get_all_barycentric_weights(ref,IN,REL);  // get forward weights i.e. find for each reference vertex which source mesh vertices surround it and what are their barycentric weights
++    forward=get_all_barycentric_weights(ref,in,REL);  // get forward weights i.e. find for each reference vertex which source mesh vertices surround it and what are their barycentric weights
+@@ -520,2 +520,2 @@
+-      //	_reverseREL=boost::shared_ptr<RELATIONS > ( new RELATIONS (_rel->invert_relations(IN,exclusion,ang)));
+-      reverse=get_all_barycentric_weights(IN,ref,_reverseREL); // calculate reverse weights i.e. weights for each source mesh vertex
++      //	_reverseREL=boost::shared_ptr<RELATIONS > ( new RELATIONS (_rel->invert_relations(in,exclusion,ang)));
++      reverse=get_all_barycentric_weights(in,ref,_reverseREL); // calculate reverse weights i.e. weights for each source mesh vertex
+@@ -523 +523 @@
+-      int numOldNodes=IN.nvertices();
++      int numOldNodes=in.nvertices();
+@@ -534 +534 @@
+-	  oldAreas[oldNode]=computevertexArea(oldNode,IN);
++	  oldAreas[oldNode]=computevertexArea(oldNode,in);
+@@ -832 +832 @@
+-  void resampler::smooth_data(const double & sigma,  boost::shared_ptr<BFMatrix>  &data, NEWMESH::newmesh  &IN)
++  void resampler::smooth_data(const double & sigma,  boost::shared_ptr<BFMatrix>  &data, NEWMESH::newmesh  &in)
+@@ -836 +836 @@
+-    upsample_w_interpolation(IN,IN,sigma,data,EXCL);
++    upsample_w_interpolation(in,in,sigma,data,EXCL);
+@@ -964 +964 @@
+-  // Here reference is the untransformed regular mesh and IN is the transformed mesh
++  // Here reference is the untransformed regular mesh and in is the transformed mesh
+unchanged:
+--- fsl/src/NewNifti/nifti2.h	2019-10-02 09:10:25.000000000 -0300
++++ fsl_patched/src/NewNifti/nifti2.h	2020-07-30 13:56:32.850314500 -0300
+@@ -0,0 +1 @@
++#include <stdint.h>
+unchanged:
+--- fsl/src/oxford_asl/Makefile	2019-11-19 07:36:22.000000000 -0300
++++ fsl_patched/src/oxford_asl/Makefile	2020-07-30 19:40:56.258702500 -0300
+@@ -20 +20 @@
+-LIBS = -lutils -lnewimage -lmiscmaths -lprob ${MATLIB} ${NIFTILIB} -lznz -lz
++LIBS = -lutils -lnewimage -lmiscmaths -lprob ${MATLIB} ${NIFTILIB} -lznz -lz -llapack -lblas
+unchanged:
+--- fsl/src/possum/Makefile	2018-10-23 07:32:07.000000000 -0300
++++ fsl_patched/src/possum/Makefile	2020-07-30 19:41:25.505003300 -0300
+@@ -15 +15 @@
+-LIBS=-lnewimage -lmiscmaths -lnewmat -lutils -lprob -lNewNifti -lznz -lm -lz
++LIBS=-lnewimage -lmiscmaths -lnewmat -lutils -lprob -lNewNifti -lznz -lm -lz -llapack -lblas
+unchanged:
+--- fsl/src/ptx2/Makefile	2019-11-09 20:27:53.000000000 -0300
++++ fsl_patched/src/ptx2/Makefile	2020-08-01 20:19:35.143138200 -0300
+@@ -22 +22 @@
+-DLIBS =  -lnewmeshclass -lwarpfns -lbasisfield -lfslsurface  -lfslvtkio -lmeshclass -lnewimage -lutils -lmiscmaths -lnewmat -lnewran -lNewNifti -lgiftiio -lexpat -lfirst_lib -lznz -lcprob -lutils -lprob -lm -lz
++DLIBS =  -lnewmeshclass -lwarpfns -lbasisfield -lfslsurface  -lfslvtkio -lmeshclass -lnewimage -lutils -lmiscmaths -lnewmat -lnewran -lNewNifti -lgiftiio -lexpat -lfirst_lib -lznz -lcprob -lutils -lprob -lm -lz -llapack -lblas 
+unchanged:
+--- fsl/src/qboot/Makefile	2014-12-11 13:07:33.000000000 -0200
++++ fsl_patched/src/qboot/Makefile	2020-07-30 19:44:23.545812800 -0300
+@@ -8 +8 @@
+-DLIBS = -lnewimage -lutils -lmiscmaths -lnewmat -lnewran -lNewNifti -lznz -lcprob -lprob -lm -lz
++DLIBS = -lnewimage -lutils -lmiscmaths -lnewmat -lnewran -lNewNifti -lznz -lcprob -lprob -lm -lz -llapack -lblas
+unchanged:
+--- fsl/src/randomise/Makefile	2019-05-31 11:05:53.000000000 -0300
++++ fsl_patched/src/randomise/Makefile	2020-07-30 19:45:09.570137400 -0300
+@@ -8 +8 @@
+-LIBS = -lnewimage -lmiscmaths -lutils -lm -lnewmat -lNewNifti -lznz -lprob -lz
++LIBS = -lnewimage -lmiscmaths -lutils -lm -lnewmat -lNewNifti -lznz -lprob -lz -llapack -lblas
+unchanged:
+--- fsl/src/siena/Makefile	2018-01-11 14:54:58.000000000 -0200
++++ fsl_patched/src/siena/Makefile	2020-07-30 19:45:49.192407300 -0300
+@@ -8 +8 @@
+-LIBCC = -lnewimage -lmiscmaths -lNewNifti -lznz -lnewmat -lutils -lm -lz
++LIBCC = -lnewimage -lmiscmaths -lNewNifti -lznz -lnewmat -lutils -lm -lz -llapack -lblas
+unchanged:
+--- fsl/src/slicetimer/Makefile	2014-12-11 11:00:08.000000000 -0200
++++ fsl_patched/src/slicetimer/Makefile	2020-07-30 19:46:47.478532200 -0300
+@@ -10 +10 @@
+-LIBS = -lnewimage -lmiscmaths -lNewNifti -lznz -lnewmat -lprob -lm -lutils -lz
++LIBS = -lnewimage -lmiscmaths -lNewNifti -lznz -lnewmat -lprob -lm -lutils -lz -llapack -lblas
+unchanged:
+--- fsl/src/susan/Makefile	2015-07-07 08:51:14.000000000 -0300
++++ fsl_patched/src/susan/Makefile	2020-07-30 19:52:12.035019800 -0300
+@@ -14 +14 @@
+-LIBS++ = -lnewimage -lmiscmaths -lnewmat -lutils -lNewNifti -lznz -lm -lz
++LIBS++ = -lnewimage -lmiscmaths -lnewmat -lutils -lNewNifti -lznz -lm -lz -llapack -lblas
+unchanged:
+--- fsl/src/swe/Makefile	2019-08-27 10:20:33.000000000 -0300
++++ fsl_patched/src/swe/Makefile	2020-07-30 19:53:06.841146600 -0300
+@@ -8 +8 @@
+-LIBS = -lnewimage -lmiscmaths -lutils -lm -lnewmat -lNewNifti -lznz -lprob -lz
++LIBS = -lnewimage -lmiscmaths -lutils -lm -lnewmat -lNewNifti -lznz -lprob -lz -llapack -lblas
+unchanged:
+--- fsl/src/tbss/Makefile	2016-01-31 12:55:42.000000000 -0200
++++ fsl_patched/src/tbss/Makefile	2020-07-30 19:54:01.423244800 -0300
+@@ -8 +8 @@
+-LIBS = -lnewimage -lmiscmaths -lprob -lNewNifti -lznz -lnewmat -lutils -lm -lz
++LIBS = -lnewimage -lmiscmaths -lprob -lNewNifti -lznz -lnewmat -lutils -lm -lz -llapack -lblas
+unchanged:
+--- fsl/src/topup/Makefile	2019-04-12 09:07:28.000000000 -0300
++++ fsl_patched/src/topup/Makefile	2020-07-30 17:02:58.440027000 -0300
+@@ -11 +11 @@
+-LIBS=-lwarpfns -lmeshclass -lbasisfield -lnewimage -lmiscmaths -lprob -lNewNifti -lznz -lutils -lnewmat -lm -lz
++LIBS=-lwarpfns -lmeshclass -lbasisfield -lnewimage -lmiscmaths -lprob -lNewNifti -lznz -lutils -lnewmat -lm -lz -llapack -lblas
+unchanged:
+--- fsl/src/topup/topup.cpp	2019-11-19 07:45:11.000000000 -0300
++++ fsl_patched/src/topup/topup.cpp	2020-08-02 09:30:36.983791000 -0300
+@@ -85,0 +86 @@
++#ifdef __linux__
+@@ -86,0 +88 @@
++#endif
+@@ -103 +105 @@
+-  StackDump::Install(); // Gives us informative stack dump if/when program crashes
++//  StackDump::Install(); // Gives us informative stack dump if/when program crashes
+unchanged:
+--- fsl/src/utils/functions.cc	2019-11-19 07:45:29.000000000 -0300
++++ fsl_patched/src/utils/functions.cc	2020-08-02 08:01:23.771630400 -0300
+@@ -86,13 +86,13 @@
+-  template<> string Option<bool>::config_key() const
+-  {
+-    if(set()) {
+-      string key(long_form());
+-      if( key == "" )
+-	key = short_form();
+-
+-      return key;
+-    } else
+-      return "";
+-  }
+-
+-  template<> string Option<bool>::value_string() const { return ""; }
++///  template<> string Option<bool>::config_key() const
++///  {
++///    if(set()) {
++///      string key(long_form());
++///      if( key == "" )
++///	key = short_form();
++///
++///      return key;
++///    } else
++///      return "";
++///  }
++///
++///  template<> string Option<bool>::value_string() const { return ""; }
+@@ -127,2 +127,2 @@
+-    if (Utilities::UserStreamFlag.find("OutputType") != Utilities::UserStreamFlag.end() &&
+-	os.iword(Utilities::UserStreamFlag["OutputType"]) == Utilities::DetailedOutput) {
++///    if (Utilities::UserStreamFlag.find("OutputType") != Utilities::UserStreamFlag.end() &&
++///	os.iword(Utilities::UserStreamFlag["OutputType"]) == Utilities::DetailedOutput) {
+@@ -130,4 +130,4 @@
+-    }
+-    else {
+-      if (set()) os << config_key().substr(0, config_key().find("="));
+-    }
++///    }
++///    else {
++///      if (set()) os << config_key().substr(0, config_key().find("="));
++///    }
+unchanged:
+--- fsl/src/utils/options.h	2019-11-19 07:45:30.000000000 -0300
++++ fsl_patched/src/utils/options.h	2020-08-02 08:00:51.183173100 -0300
+@@ -258,2 +258,2 @@
+-    virtual std::string value_string() const = 0;
+-    virtual std::string config_key() const = 0;
++///    virtual std::string value_string() const = 0;
++///    virtual std::string config_key() const = 0;
+@@ -375,18 +375,18 @@
+-    std::string config_key() const
+-    {
+-      std::string key(long_form());
+-      if( key != "" )
+-	key = key + "=";
+-      else
+-	key = short_form() + " ";
+-
+-      return key;
+-    }
+-
+-    std::string value_string() const
+-    {
+-      std::ostringstream os;
+-      os << value();
+-
+-      return os.str();
+-    }
++///    std::string config_key() const
++///    {
++///      std::string key(long_form());
++///      if( key != "" )
++///	key = key + "=";
++///      else
++///	key = short_form() + " ";
++///
++///      return key;
++///    }
++///
++///    std::string value_string() const
++///    {
++///      std::ostringstream os;
++///      os << value();
++///
++///      return os.str();
++///    }
+@@ -425,2 +425,3 @@
+-      os << "# " << help_text() << std::endl
+-	 << config_key() << value_string();
++      os << "# " << help_text() << std::endl;  ///trailing ";" added 
++///      os << "# " << help_text() << std::endl
++///	 << config_key() << value_string();
+unchanged:
+--- fsl/src/utils/stack_dump.h	2019-08-19 08:19:08.000000000 -0300
++++ fsl_patched/src/utils/stack_dump.h	2020-07-30 15:52:22.516390400 -0300
+@@ -37,0 +38 @@
++#ifdef __linux__
+@@ -38,0 +40 @@
++#endif
+unchanged:
+--- fsl/extras/build	2019-09-02 07:51:11.000000000 -0300
++++ fsl_patched/extras/build	2020-08-03 12:16:38.250920500 -0300
+@@ -99 +99 @@
+-PROJECTS="tcl tk"
++#PROJECTS="tcl tk"
+@@ -103 +103 @@
+-PROJECTS="${PROJECTS} libpng"
++#PROJECTS="${PROJECTS} libpng"
+@@ -107,2 +107,3 @@
+-PROJECTS="${PROJECTS} libgd libgdc libprob libcprob newmat cprob newran fftw"
+-PROJECTS="${PROJECTS} boost libxml2-2.9.2 libxmlpp libsqlite libnlopt ../include/armawrap/dummy_newmat"
++#PROJECTS="${PROJECTS} libgd libgdc libprob libcprob newmat cprob newran fftw"
++#PROJECTS="${PROJECTS} boost libxml2-2.9.2 libxmlpp libsqlite libnlopt ../include/armawrap/dummy_newmat"
++PROJECTS="${PROJECTS} libgdc libprob libcprob newmat cprob newran libxml2-2.9.2 libxmlpp ../include/armawrap/dummy_newmat"
+unchanged:
+--- fsl/etc/fslconf/fsl.sh	2019-09-24 11:18:42.000000000 -0300
++++ fsl_patched/etc/fslconf/fsl.sh	2020-07-29 20:11:54.566423900 -0300
+@@ -52,2 +52,2 @@
+-#FSLCONFDIR=$FSLDIR/config
+-#FSLMACHTYPE=`$FSLDIR/etc/fslconf/fslmachtype.sh`
++FSLCONFDIR=$FSLDIR/config
++FSLMACHTYPE=`$FSLDIR/etc/fslconf/fslmachtype.sh`
+@@ -55 +55 @@
+-#export FSLCONFDIR FSLMACHTYPE
++export FSLCONFDIR FSLMACHTYPE
+unchanged:
+--- fsl/extras/src/libxmlpp/libxml++/attribute.cc	2019-05-20 09:50:12.000000000 -0300
++++ fsl_patched/extras/src/libxmlpp/libxml++/attribute.cc	2020-08-04 09:59:52.190063700 -0300
+@@ -36 +36 @@
+-  xmlFree(value);
++  ///xmlFree(value);
+unchanged:
+--- fsl/extras/src/libxmlpp/libxml++/nodes/node.cc	2019-05-20 09:50:12.000000000 -0300
++++ fsl_patched/extras/src/libxmlpp/libxml++/nodes/node.cc	2020-08-04 09:59:55.070067700 -0300
+@@ -258 +258 @@
+-  xmlFree(path);
++  ///xmlFree(path);
+unchanged:
+--- fsl/extras/src/libxmlpp/libxml++/parsers/textreader.cc	2019-05-20 09:50:12.000000000 -0300
++++ fsl_patched/extras/src/libxmlpp/libxml++/parsers/textreader.cc	2020-08-04 09:59:57.860071600 -0300
+@@ -432 +432 @@
+-    xmlFree(value);
++    ///xmlFree(value);
+unchanged:
+--- fsl/extras/src/libxmlpp/libxml++/io/istreamparserinputbuffer.cc	2019-05-20 09:50:12.000000000 -0300
++++ fsl_patched/extras/src/libxmlpp/libxml++/io/istreamparserinputbuffer.cc	2020-08-04 23:54:32.598502100 -0300
+@@ -42 +42 @@
+-    return input_;
++    return static_cast<bool>(input_);
+only in patch2:
+unchanged:
+--- fsl/extras/src/libxmlpp/libxml++/io/ostreamoutputbuffer.cc	2019-05-20 09:50:12.000000000 -0300
++++ fsl_patched/extras/src/libxmlpp/libxml++/io/ostreamoutputbuffer.cc	2020-08-04 23:56:01.596658400 -0300
+@@ -32 +32 @@
+-    return output_;
++    return static_cast<bool>(output_);
+@@ -39 +39 @@
+-    return output_;
++    return static_cast<bool>(output_);
