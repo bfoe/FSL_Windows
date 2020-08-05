@@ -34,7 +34,7 @@ this will automatically download and install FSL 6.0.3 sources from the <br>
 
 ### Post-Install
 ```diff
--   NOT IMPLE<ENTED YET
+-   NOT IMPLEMENTED YET
 ```
 
 ### Test FSL with official FEEDS testsuite
@@ -63,3 +63,7 @@ feel free to play arround
 (to see my dirty patches search for "fsl/src/utils" in "fsl_patch" and lookout for "///") <br>
 - there are probably many more bugs, if you find any please don't hesitate to open an issue
 
+### License
+- original FSL license (https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Licence)
+- this project's additions/modifications are under the
+<a href="https://en.wikipedia.org/wiki/MIT_License">MIT license</a> 

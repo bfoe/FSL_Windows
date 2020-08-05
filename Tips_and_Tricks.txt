@@ -1,0 +1,25 @@
+1) How the patch was created
+============================
+- FSL source code installed
+- compile/debug/edit cyles (many)
+- when ready, renamed main folder to "fsl_pached"
+- fresh FSL install to original folder name "fsl"
+then:
+  diff -ru0d fsl/src  fsl_patched/src | grep -v '^Only in ' | grep -v '^Binary files ' | grep -v '^diff -ru0d ' >fsl_patch1
+  diff -u0d fsl/extras/build  fsl_patched/extras/build >fsl_patch2
+  diff -u0d fsl/etc/fslconf/fsl.sh  fsl_patched/etc/fslconf/fsl.sh >fsl_patch3
+  diff -u0d fsl/extras/src/libxmlpp/libxml++/attribute.cc  fsl_patched/extras/src/libxmlpp/libxml++/attribute.cc >fsl_patch4
+  diff -u0d fsl/extras/src/libxmlpp/libxml++/nodes/node.cc  fsl_patched/extras/src/libxmlpp/libxml++/nodes/node.cc >fsl_patch5
+  diff -u0d fsl/extras/src/libxmlpp/libxml++/parsers/textreader.cc  fsl_patched/extras/src/libxmlpp/libxml++/parsers/textreader.cc >fsl_patch6
+  diff -u0d fsl/extras/src/libxmlpp/libxml++/io/istreamparserinputbuffer.cc  fsl_patched/extras/src/libxmlpp/libxml++/io/istreamparserinputbuffer.cc >fsl_patch7
+  diff -u0d fsl/extras/src/libxmlpp/libxml++/io/ostreamoutputbuffer.cc  fsl_patched/extras/src/libxmlpp/libxml++/io/ostreamoutputbuffer.cc >fsl_patch8
+  combinediff fsl_patch1 fsl_patch2 >temp1
+  combinediff temp1 fsl_patch3 >temp2
+  combinediff temp2 fsl_patch4 >temp3
+  combinediff temp3 fsl_patch5 >temp4
+  combinediff temp4 fsl_patch6 >temp5
+  combinediff temp5 fsl_patch7 >temp6
+  combinediff temp6 fsl_patch8 >fsl_patch
+  rm temp1 temp2 temp3 temp4 temp5 temp6
+  rm fsl_patch1 fsl_patch2 fsl_patch3 fsl_patch4 fsl_patch5  fsl_patch6 fsl_patch7  fsl_patch8
+  
