@@ -28,13 +28,17 @@ this will automatically download and install FSL 6.0.3 sources from the <br>
 - run the **Compile_FSLsources.sh** shellscript from this repository <br>
 (this will take a while and should finish with "Build completed successfully."
 
+### Precombiled Windows Executables
+- can be found under the Release tab
+<a href="https://github.com/bfoe/FSL_Windows/releases/download/v0.0/fsl-6.0.3-executables.zip">here</a>
+
 ### Post-Install
 ```diff
 -   NOT IMPLE<ENTED YET
 ```
 
 ### Test FSL with official FEEDS testsuite
-- run the **Test_FSLfeedsy.sh** shellscript from this repository <br>
+- run the **Test_FSLfeeds.sh** shellscript from this repository <br>
 ```diff
 -   steps that are NOT WORKING YET are commented out in the script
 ```
@@ -52,6 +56,7 @@ feel free to play arround
 (if you happen to know TCL you are very much wellcome to contribute;)
 - does not read/write compressed NIFTI (.nii.gz) only uncompressed (.nii) <br> 
 (don't know how to solve this, anybody help?)
+- slow: windows executables are ~4x slower than their equivalent running in Virtual Machine
 - may have problems when trying to process .xml files in atlas operations (memory leaks ?) <br>
 (to see my dirty patches search for "///xmlFree" in "fsl_patch")
 - may have problems parsing arguments passed to executables <br>
