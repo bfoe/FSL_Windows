@@ -1,6 +1,6 @@
 #!/bin/sh
-if [ ! -d "~/fslbuild" ]; then
-  mkdir ~/fslbuild
+if [ ! -d "$HOME/fslbuild" ]; then
+  mkdir $HOME/fslbuild
 fi
 cd  ~/fslbuild
 if [ ! -f "fsl-6.0.3-sources.tar.gz" ]; then
@@ -16,7 +16,15 @@ if [ -d "$HOME/fslbuild/fsl" ]; then
 fi
 echo "uncompressing sources ....."
 tar zxf fsl-6.0.3-sources.tar.gz
-patch -p0 <~/fsl_patch
+cd ~
+if [ -f "fsl_patch" ]; then
+  patch -p0 <fsl_patch
+else
+  echo "sorry, patch file not found"
+fi
+if [ ! -d "$HOME/fslbuild/fsl/bin" ]; then
+  mkdir $HOME/fslbuild/fsl/bin
+fi
 # alternatively use:
 # ln -s /mingw64/bin/tclsh ~/fslbuild/fsl/bin/fsltclsh
 ln -s /usr/bin/tclsh ~/fslbuild/fsl/bin/fsltclsh

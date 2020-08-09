@@ -17,15 +17,17 @@ so you may remove the Desktop Shortcuts for MinGW32 and MSYS2
 - run the **Setup_MinGW64.sh** shellscript from this repository <br>
 this will automatically download and install the required packages from the <br>
 <a href="https://packages.msys2.org/base">MSYS2 repository</a>
+- copy the files from this repository to the MSYS2 home user folder (C:\msys64\home\user)
+- open a MinGW64 shell
 
 ### Download and Patch FSL sourcecode
-- run the **Setup_FSLsources.sh** shellscript from this repository <br>
+- run the **Setup_FSLsources.sh** shellscript <br>
 this will automatically download and install FSL 6.0.3 sources from the <br>
 <a href="https://fsl.fmrib.ox.ac.uk">FMRIB website</a>
 (if the download fails (due to a newer FSL version available) edit the script)
 
 ### Compile FSL
-- run the **Compile_FSLsources.sh** shellscript from this repository <br>
+- run the **Compile_FSLsources.sh** shellscript <br>
 (this will take a while and should finish with "Build completed successfully."
 
 ### Precombiled Windows Executables
@@ -38,13 +40,13 @@ this will automatically download and install FSL 6.0.3 sources from the <br>
 ```
 
 ### Test FSL with official FEEDS testsuite
-- run the **Test_FSLfeeds.sh** shellscript from this repository <br>
+- run the **Test_FSLfeeds.sh** shellscript <br>
 ```diff
 -   steps that are NOT WORKING YET are commented out in the script
 ```
 
 ### Test FSL Graphical User Interface
-- run the **runFSL.sh** shellscript from this repository <br>
+- run the **runFSL.sh** shellscript <br>
 feel free to play arround
 ```diff
 -   you probably will find many things that are NOT WORKING YET
@@ -52,11 +54,8 @@ feel free to play arround
 
 ### Known Problems
 - Post-Install not implemented yet
-- some TCL commands do not work yet <br>
-(if you happen to know TCL you are very much wellcome to contribute;)
-- does not read/write compressed NIFTI (.nii.gz) only uncompressed (.nii) <br> 
-(don't know how to solve this, anybody help?)
-- slow: windows executables are ~4x slower than their equivalent running in Virtual Machine
+- TCL commands do not work yet
+- slow: windows executables are ~2x slower than their equivalent running in Virtual Machine
 - may have problems when trying to process .xml files in atlas operations (memory leaks ?) <br>
 (to see my dirty patches search for "///xmlFree" in "fsl_patch")
 - may have problems parsing arguments passed to executables <br>

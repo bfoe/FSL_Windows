@@ -1,6 +1,6 @@
 #!/bin/sh
 cd  ~/fslbuild
-if [ ! -f "fsl-6.0.3-sources.tar.gz" ]; then
+if [ ! -f "fsl-6.0.3-feeds.tar.gz" ]; then
   echo "downloading FSL FEEDS Testsuite ....."
   # when not available anymore at later dates, 
   # look in https://fsl.fmrib.ox.ac.uk/fsldownloads/oldversions/fsl-6.0.3-feeds.tar.gz
@@ -13,9 +13,6 @@ if [ -d "$HOME/fslbuild/feeds" ]; then
 fi
 echo "uncompressing FSL FEEDS Testsuite ....."
 tar zxvf fsl-6.0.3-feeds.tar.gz >/dev/nul
-# patch known bug
-gunzip -r ~/fslbuild/feeds/data
-sed -i 's/.nii.gz/.gz/g' ~/fslbuild/feeds/RUN
 # prepare to run
 export FSLDIR=~/fslbuild/fsl
 . ${FSLDIR}/etc/fslconf/fsl.sh
@@ -24,7 +21,7 @@ export DISPLAY=localhost:0.0
 # alternatively use
 # export FSLTCLSH=/mingw64/bin/tclsh
 export FSLTCLSH=/usr/bin/tclsh
-export FSLOUTPUTTYPE=NIFTI
+export FSLOUTPUTTYPE=NIFTI_GZ
 export FEEDSDIR=~/fslbuild/feeds
 cd ~/fslbuild/feeds
 # run what works (what throws errors is commented out)
