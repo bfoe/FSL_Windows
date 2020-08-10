@@ -1,5 +1,5 @@
 --- fslbuild/fsl/config/buildSettings.mk	2019-03-20 11:06:00.000000000 -0300
-+++ fslbuild/fsl_patched/config/buildSettings.mk	2020-08-08 18:18:34.865577900 -0300
++++ fslbuild/fsl_patched/config/buildSettings.mk	2020-08-09 19:33:49.866095500 -0300
 @@ -181,0 +182,72 @@
 +#####################################################################
 +#
@@ -38,7 +38,7 @@
 +# -ftree-partial-pre -ftree-slp-vectorize -funswitch-loops -fvect-cost-model\
 +# -fvect-cost-model=dynamic -fversion-loops-for-strides
 +#
-+GNU_ANSI_FLAGS = -Wall -pedantic -Wno-long-long -DBOOST_LOG_DYN_LINK
++GNU_ANSI_FLAGS = -Wall -pedantic -Wno-long-long -Wno-cpp -DBOOST_LOG_DYN_LINK
 +ANSI_CFLAGS = ${GNU_ANSI_FLAGS}
 +ANSI_CXXFLAGS = ${GNU_ANSI_FLAGS} -ansi -std=gnu++11
 +RANLIB = ranlib
@@ -74,10 +74,8 @@
 +endif # if Mingw
 +
 --- fslbuild/fsl/config/common/rules.mk	2019-03-20 11:06:00.000000000 -0300
-+++ fslbuild/fsl_patched/config/common/rules.mk	2020-08-09 01:25:55.780141300 -0300
-@@ -196,0 +197 @@
-+	@sleep 5
-@@ -203,4 +204,24 @@
++++ fslbuild/fsl_patched/config/common/rules.mk	2020-08-09 21:19:22.633016400 -0300
+@@ -203,4 +203,22 @@
 -	@for exefile in ${XFILES} ${SCRIPTS} verylongdummyname ; do \
 -		if [ -f $$exefile ] ; then \
 -			${INSTALL} -m 0775 $$exefile ${dest_BINDIR}/ ; \
@@ -89,7 +87,7 @@
 +			fi ; \
 +			if [ -f $$exefile ] ; then \
 +				${INSTALL} -m 0775 $$exefile ${dest_BINDIR}/ ; \
-+				if [ -f ${dest_BINDIR}/$$exefile ] ; then \
++				if [ -f ${dest_BINDIR}/$${exefile##*/} ] ; then \
 +					echo ${INSTALL} -m 0775 $$exefile ${dest_BINDIR}/ ; \
 +				else \
 +					echo error: ${INSTALL} -m 0775 $$exefile ${dest_BINDIR}/ failed; \
@@ -101,19 +99,17 @@
 +	done
 +	@echo "Installing stable scripts"
 +	@for scriptfile in ${SCRIPTS} verylongdummyname ; do \
-+		if [ $$scriptfile !=  verylongdummyname ] ; then \
-+			if [ -f $$scriptfile] ; then \
-+				${INSTALL} -m 0775 $$scriptfile ${dest_BINDIR}/ ; \
-+				echo ${INSTALL} -m 0775 $$scriptfile ${dest_BINDIR}/ ; \
-+			fi \
-@@ -211 +232 @@
++		if [ -f $$scriptfile ] ; then \
++			${INSTALL} -m 0775 $$scriptfile ${dest_BINDIR}/ ; \
++			echo ${INSTALL} -m 0775 $$scriptfile ${dest_BINDIR}/ ; \
+@@ -211 +229 @@
 -			if [ `uname` = Darwin -o X`uname | grep CYGWIN`X != XX ] ; then \
 +			if [ `uname` = Darwin -o X`uname | grep MINGW64`X != XX ] ; then \
-@@ -238 +259 @@
+@@ -238 +256 @@
 -			if [ `uname` = Darwin -o X`uname | grep CYGWIN`X != XX ] ; then \
 +			if [ `uname` = Darwin -o X`uname | grep MINGW64`X != XX ] ; then \
 --- fslbuild/fsl/etc/fslconf/fsl.sh	2019-09-24 11:18:42.000000000 -0300
-+++ fslbuild/fsl_patched/etc/fslconf/fsl.sh	2020-08-08 18:18:34.865577900 -0300
++++ fslbuild/fsl_patched/etc/fslconf/fsl.sh	2020-08-09 01:59:15.767467000 -0300
 @@ -52,2 +52,2 @@
 -#FSLCONFDIR=$FSLDIR/config
 -#FSLMACHTYPE=`$FSLDIR/etc/fslconf/fslmachtype.sh`
@@ -123,7 +119,7 @@
 -#export FSLCONFDIR FSLMACHTYPE
 +export FSLCONFDIR FSLMACHTYPE
 --- fslbuild/fsl/extras/build	2019-09-02 07:51:11.000000000 -0300
-+++ fslbuild/fsl_patched/extras/build	2020-08-09 01:50:06.199550500 -0300
++++ fslbuild/fsl_patched/extras/build	2020-08-09 01:59:15.767467000 -0300
 @@ -90,0 +91,2 @@
 +BUILDTCLTK=1
 +BUILDLIBPNG=1
@@ -154,7 +150,7 @@
 +  PROJECTS="${PROJECTS} boost libxml2-2.9.2 libxmlpp libsqlite libnlopt ../include/armawrap/dummy_newmat"
 +fi
 --- fslbuild/fsl/src/asl_mfree/asl_mfree.cc	2019-11-19 07:45:41.000000000 -0300
-+++ fslbuild/fsl_patched/src/asl_mfree/asl_mfree.cc	2020-08-08 18:18:34.875577900 -0300
++++ fslbuild/fsl_patched/src/asl_mfree/asl_mfree.cc	2020-08-09 01:59:15.777467000 -0300
 @@ -246,3 +246,3 @@
 -            volume4D<float> stdout;
 -            stdout.setmatrix(magstd.AsMatrix(1, nvox), mask);
@@ -163,7 +159,7 @@
 +            stddevout.setmatrix(magstd.AsMatrix(1, nvox), mask);
 +            save_volume4D(stddevout, opts.outname.value() + "_stddev");
 --- fslbuild/fsl/src/CiftiLib-master/Cifti/CiftiFile.cxx	2016-10-19 10:17:55.000000000 -0200
-+++ fslbuild/fsl_patched/src/CiftiLib-master/Cifti/CiftiFile.cxx	2020-08-08 18:18:34.875577900 -0300
++++ fslbuild/fsl_patched/src/CiftiLib-master/Cifti/CiftiFile.cxx	2020-08-09 01:59:15.777467000 -0300
 @@ -85 +85 @@
 -        return filesystem::absolute(AString_to_std_string(mypath)).native();
 +        return filesystem::absolute(AString_to_std_string(mypath)).string();
@@ -174,7 +170,7 @@
 -        return filesystem::canonical(temp).native();
 +        return filesystem::canonical(temp).string();
 --- fslbuild/fsl/src/fabber_core/fabber_core.cc	2019-11-19 07:45:20.000000000 -0300
-+++ fslbuild/fsl_patched/src/fabber_core/fabber_core.cc	2020-08-08 18:18:34.875577900 -0300
++++ fslbuild/fsl_patched/src/fabber_core/fabber_core.cc	2020-08-09 01:59:15.777467000 -0300
 @@ -125,0 +126,3 @@
 +        #ifdef _WIN64
 +        int errcode = atoi(getenv(name));
@@ -182,19 +178,19 @@
 @@ -126,0 +130 @@
 +        #endif
 --- fslbuild/fsl/src/flameo/Makefile	2018-10-02 10:46:58.000000000 -0300
-+++ fslbuild/fsl_patched/src/flameo/Makefile	2020-08-08 18:18:34.875577900 -0300
++++ fslbuild/fsl_patched/src/flameo/Makefile	2020-08-09 01:59:15.777467000 -0300
 @@ -13 +13 @@
 -LIBS += -lutils -lnewimage -lmiscmaths -lm -lnewmat -lNewNifti -lcifti -lxml++-2.6 -lxml2 -lboost_filesystem -lboost_system -lznz -lprob -lz 
 +LIBS += -lutils -lnewimage -lmiscmaths -lm -lnewmat -lNewNifti -lcifti -lxml++-2.6 -lxml2 -lboost_filesystem-mt -lboost_system-mt -lznz -lprob -lz 
 --- fslbuild/fsl/src/fslsurface/fslsurfacemaths.cpp	2019-11-19 07:46:34.000000000 -0300
-+++ fslbuild/fsl_patched/src/fslsurface/fslsurfacemaths.cpp	2020-08-08 18:18:34.885577900 -0300
++++ fslbuild/fsl_patched/src/fslsurface/fslsurfacemaths.cpp	2020-08-09 01:59:15.787467000 -0300
 @@ -79,2 +79,2 @@
 -#ifdef __linux
 -#else
 +#ifdef __APPLE__
 +//AGL=Apple Graphics Library
 --- fslbuild/fsl/src/fslsurface/Makefile	2014-12-16 12:52:05.000000000 -0200
-+++ fslbuild/fsl_patched/src/fslsurface/Makefile	2020-08-08 18:18:34.885577900 -0300
++++ fslbuild/fsl_patched/src/fslsurface/Makefile	2020-08-09 01:59:15.787467000 -0300
 @@ -7,0 +8 @@
 +ismingw = $(findstring mingw, $(FSLMACHTYPE))
 @@ -10 +11,3 @@
@@ -203,7 +199,7 @@
 +        FMLIBS += -lGL -lGLU 
 +   endif
 --- fslbuild/fsl/src/lesions/lesion_filling.cc	2019-11-19 07:44:56.000000000 -0300
-+++ fslbuild/fsl_patched/src/lesions/lesion_filling.cc	2020-08-08 18:18:34.885577900 -0300
++++ fslbuild/fsl_patched/src/lesions/lesion_filling.cc	2020-08-09 01:59:15.787467000 -0300
 @@ -124,0 +125,3 @@
 +    #ifdef _WIN64
 +    int mrand=Max(Min(ceil((double(rand())/MAXRAND)*(max-min+1)),(max-min+1)),1)+min-1;    
@@ -211,7 +207,7 @@
 @@ -125,0 +129 @@
 +    #endif
 --- fslbuild/fsl/src/mcflirt/Log.cc	2019-11-19 07:47:11.000000000 -0300
-+++ fslbuild/fsl_patched/src/mcflirt/Log.cc	2020-08-08 18:18:34.885577900 -0300
++++ fslbuild/fsl_patched/src/mcflirt/Log.cc	2020-08-09 01:59:15.787467000 -0300
 @@ -87,0 +88,3 @@
 +      #ifdef _WIN64
 +      if ( (ret = mkdir(dir.c_str()))!= 0){
@@ -219,28 +215,49 @@
 @@ -88,0 +92 @@
 +      #endif
 --- fslbuild/fsl/src/melodic/Makefile	2019-10-28 11:28:23.000000000 -0300
-+++ fslbuild/fsl_patched/src/melodic/Makefile	2020-08-08 18:18:34.885577900 -0300
++++ fslbuild/fsl_patched/src/melodic/Makefile	2020-08-09 01:59:15.787467000 -0300
 @@ -18 +18 @@
 -LIBS += -lutils -lnewimage -lmiscplot -lmiscpic -lmiscmaths -lNewNifti -lcifti -lxml++-2.6 -lxml2 -lboost_filesystem -lboost_system -lznz -lnewmat -lprob -lm  -lgdc -lgd -lpng -lz
 +LIBS += -lutils -lnewimage -lmiscplot -lmiscpic -lmiscmaths -lNewNifti -lcifti -lxml++-2.6 -lxml2 -lboost_filesystem-mt -lboost_system-mt -lznz -lnewmat -lprob -lm  -lgdc -lgd -lpng -lz
 --- fslbuild/fsl/src/melodic/meldata.cc	2019-11-19 07:47:08.000000000 -0300
-+++ fslbuild/fsl_patched/src/melodic/meldata.cc	2020-08-08 18:18:34.895577900 -0300
++++ fslbuild/fsl_patched/src/melodic/meldata.cc	2020-08-09 01:59:15.797467000 -0300
 @@ -1018 +1018 @@
 -      if(in>0){
 +      if(in.is_open()){
 --- fslbuild/fsl/src/miscvis/Makefile	2019-08-12 10:51:47.000000000 -0300
-+++ fslbuild/fsl_patched/src/miscvis/Makefile	2020-08-08 21:27:24.852929700 -0300
++++ fslbuild/fsl_patched/src/miscvis/Makefile	2020-08-09 21:27:18.933880100 -0300
 @@ -24 +24 @@
 -	$(CXX) ${CXXFLAGS} ${LDFLAGS} -o slicer slicer.o  ${LIBS}
-+	$(CXX) ${CXXFLAGS} ${LDFLAGS} -o slicer slicer.o  ${LIBS}; sleep 2
++	$(CXX) ${CXXFLAGS} ${LDFLAGS} -o slicer slicer.o  ${LIBS}; sync
+@@ -27 +27 @@
+-	$(CXX) ${CXXFLAGS} ${LDFLAGS} -o overlay overlay.o ${LIBS}
++	$(CXX) ${CXXFLAGS} ${LDFLAGS} -o overlay overlay.o ${LIBS}; sync
+@@ -30 +30 @@
+-	$(CXX) ${CXXFLAGS} ${LDFLAGS} -o fsl_tsplot fsl_tsplot.o ${LIBS}
++	$(CXX) ${CXXFLAGS} ${LDFLAGS} -o fsl_tsplot fsl_tsplot.o ${LIBS}; sync
+@@ -33 +33 @@
+-	$(CXX) ${CXXFLAGS} ${LDFLAGS} -o fsl_boxplot fsl_boxplot.o ${LIBS}
++	$(CXX) ${CXXFLAGS} ${LDFLAGS} -o fsl_boxplot fsl_boxplot.o ${LIBS}; sync
+@@ -36 +36 @@
+-	$(CXX) ${CXXFLAGS} ${LDFLAGS} -o fsl_histogram fsl_histogram.o ${LIBS}
++	$(CXX) ${CXXFLAGS} ${LDFLAGS} -o fsl_histogram fsl_histogram.o ${LIBS}; sync
 @@ -39 +39 @@
 -	$(CC) $(CFLAGS) -o create_lut create_lut.c
-+	$(CC) $(CFLAGS) -o create_lut create_lut.c; sleep 5
++	$(CC) $(CFLAGS) -o create_lut create_lut.c; sync
 @@ -49 +49 @@
 -	./create_lut $(DESTDIR)/etc/luts/render
-+	./create_lut $(DESTDIR)/etc/luts/render; sleep 2
++	./create_lut $(DESTDIR)/etc/luts/render; sync; sleep 60  
+@@ -52 +52 @@
+-	$(CXX)  ${CXXFLAGS} ${LDFLAGS} -o pngappend pngappend.cc ${LIBS}
++	$(CXX)  ${CXXFLAGS} ${LDFLAGS} -o pngappend pngappend.cc ${LIBS}; sync
+@@ -55 +55,2 @@
+-	$(CC)  ${CXXFLAGS} ${LDFLAGS} -o $@ ${WOBJS} ${LIBS} 
+\ No newline at end of file
++	$(CC)  ${CXXFLAGS} ${LDFLAGS} -o $@ ${WOBJS} ${LIBS}; sync
++    
+\ No newline at end of file
 --- fslbuild/fsl/src/mist-clean/Makefile	2019-01-07 12:22:09.000000000 -0200
-+++ fslbuild/fsl_patched/src/mist-clean/Makefile	2020-08-08 18:18:34.895577900 -0300
++++ fslbuild/fsl_patched/src/mist-clean/Makefile	2020-08-09 01:59:15.797467000 -0300
 @@ -3 +3 @@
 -NLOPT_INC = ${FSLEXTINC}
 +NLOPT_INC = /mingw64/include
@@ -259,7 +276,7 @@
 -			${SQLITE_LIB}/libsqlite3.a ${LIBRT}
 +            -lsqlite3
 --- fslbuild/fsl/src/newmesh/featurespace.cc	2019-11-19 07:46:23.000000000 -0300
-+++ fslbuild/fsl_patched/src/newmesh/featurespace.cc	2020-08-08 18:18:34.895577900 -0300
++++ fslbuild/fsl_patched/src/newmesh/featurespace.cc	2020-08-09 01:59:15.797467000 -0300
 @@ -75 +75 @@
 -  NEWMESH::newmesh featurespace::Initialize(const int &ico, vector<NEWMESH::newmesh> &IN,const bool & exclude){
 +  NEWMESH::newmesh featurespace::Initialize(const int &ico, vector<NEWMESH::newmesh> &in,const bool & exclude){
@@ -304,7 +321,7 @@
 -    R.smooth_data(_sigma,tmp,IN);
 +    R.smooth_data(_sigma,tmp,in);
 --- fslbuild/fsl/src/newmesh/meshfns.cc	2019-11-19 07:46:24.000000000 -0300
-+++ fslbuild/fsl_patched/src/newmesh/meshfns.cc	2020-08-08 18:18:34.905577900 -0300
++++ fslbuild/fsl_patched/src/newmesh/meshfns.cc	2020-08-09 01:59:15.807467000 -0300
 @@ -1045 +1045 @@
 -  void histogram_normalization(NEWMESH::newmesh  & IN, const NEWMESH::newmesh & REF,const string &excl_in,const string &excl_ref, int numbins){
 +  void histogram_normalization(NEWMESH::newmesh  & in, const NEWMESH::newmesh & REF,const string &excl_in,const string &excl_ref, int numbins){
@@ -402,7 +419,7 @@
 -    for (int i=1;i<=IN.npvalues();i++){
 +    for (int i=1;i<=in.npvalues();i++){
 --- fslbuild/fsl/src/newmesh/resampler.cc	2019-11-19 07:46:25.000000000 -0300
-+++ fslbuild/fsl_patched/src/newmesh/resampler.cc	2020-08-08 18:18:34.905577900 -0300
++++ fslbuild/fsl_patched/src/newmesh/resampler.cc	2020-08-09 01:59:15.807467000 -0300
 @@ -397 +397 @@
 -  void resampler::barycentric_interpolation(NEWMESH::newmesh &IN, const NEWMESH::newmesh  &ref, boost::shared_ptr<BFMatrix> &data, boost::shared_ptr<NEWMESH::newmesh> &EXCL, boost::shared_ptr<RELATIONS > _rel)
 +  void resampler::barycentric_interpolation(NEWMESH::newmesh &in, const NEWMESH::newmesh  &ref, boost::shared_ptr<BFMatrix> &data, boost::shared_ptr<NEWMESH::newmesh> &EXCL, boost::shared_ptr<RELATIONS > _rel)
@@ -457,11 +474,11 @@
 -  // Here reference is the untransformed regular mesh and IN is the transformed mesh
 +  // Here reference is the untransformed regular mesh and in is the transformed mesh
 --- fslbuild/fsl/src/NewNifti/nifti2.h	2019-10-02 09:10:25.000000000 -0300
-+++ fslbuild/fsl_patched/src/NewNifti/nifti2.h	2020-08-08 18:18:34.905577900 -0300
++++ fslbuild/fsl_patched/src/NewNifti/nifti2.h	2020-08-09 01:59:15.807467000 -0300
 @@ -0,0 +1 @@
 +#include <stdint.h>
 --- fslbuild/fsl/src/topup/topup.cpp	2019-11-19 07:45:11.000000000 -0300
-+++ fslbuild/fsl_patched/src/topup/topup.cpp	2020-08-08 18:18:34.905577900 -0300
++++ fslbuild/fsl_patched/src/topup/topup.cpp	2020-08-09 01:59:15.817467000 -0300
 @@ -85,0 +86 @@
 +#ifndef _WIN64
 @@ -86,0 +88 @@
@@ -472,7 +489,7 @@
 -
 +  #endif
 --- fslbuild/fsl/src/utils/functions.cc	2019-11-19 07:45:29.000000000 -0300
-+++ fslbuild/fsl_patched/src/utils/functions.cc	2020-08-08 18:18:34.915577900 -0300
++++ fslbuild/fsl_patched/src/utils/functions.cc	2020-08-09 01:59:15.817467000 -0300
 @@ -86,13 +86,13 @@
 -  template<> string Option<bool>::config_key() const
 -  {
@@ -515,7 +532,7 @@
 +///      if (set()) os << config_key().substr(0, config_key().find("="));
 +///    }
 --- fslbuild/fsl/src/utils/options.h	2019-11-19 07:45:30.000000000 -0300
-+++ fslbuild/fsl_patched/src/utils/options.h	2020-08-08 18:18:34.915577900 -0300
++++ fslbuild/fsl_patched/src/utils/options.h	2020-08-09 01:59:15.817467000 -0300
 @@ -258,2 +258,2 @@
 -    virtual std::string value_string() const = 0;
 -    virtual std::string config_key() const = 0;

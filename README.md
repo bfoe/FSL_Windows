@@ -32,7 +32,7 @@ this will automatically download and install FSL 6.0.3 sources from the <br>
 
 ### Precombiled Windows Executables
 - can be found under the Release tab
-<a href="https://github.com/bfoe/FSL_Windows/releases/download/v0.0/fsl-6.0.3-executables.zip">here</a>
+<a href="https://github.com/bfoe/FSL_Windows/releases/download/v0.1/fsl-6.0.3-executables.zip">here</a>
 
 ### Post-Install
 ```diff
