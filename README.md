@@ -3,11 +3,11 @@
 <img src="https://twiki.cern.ch/twiki/pub/IPv6/ResourceRepository/work_in_progress.png" width=10% height=10%>
 this project is highly Work-In-Pogress
 <img src="https://twiki.cern.ch/twiki/pub/IPv6/ResourceRepository/work_in_progress.png" width=10% height=10%>
-#
-#
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Vienna_Convention_road_sign_B2a.svg/120px-Vienna_Convention_road_sign_B2a.svg.png">
+<br>
+<br>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Vienna_Convention_road_sign_B2a.svg/120px-Vienna_Convention_road_sign_B2a.svg.png" width=50% height=50%>
 for the moment this project is on hold
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Vienna_Convention_road_sign_B2a.svg/120px-Vienna_Convention_road_sign_B2a.svg.png">
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Vienna_Convention_road_sign_B2a.svg/120px-Vienna_Convention_road_sign_B2a.svg.png" width=50% height=50%>
 </h3>
 
 #
@@ -40,21 +40,23 @@ this will automatically download and install FSL 6.0.3 sources from the <br>
 - can be found under the Release tab
 <a href="https://github.com/bfoe/FSL_Windows/releases/download/v0.1/fsl-6.0.3-executables.zip">here</a>
 
-### Post-Install (**only working partially**)
+#
+### Post-Install (only working partially)
 - run the **PostInstall.sh** shellscript <br>
 
-### Test FSL with official FEEDS testsuite( **only working partially**)
+### Test FSL with official FEEDS testsuite (only working partially)
 - run the **Test_FSLfeeds.sh** shellscript <br>
 
-### Test FSL Graphical User Interface( **only working partially**)
+### Test FSL Graphical User Interface (only working partially)
 - run the **runFSL.sh** shellscript <br>
 - feel free to play arround
   you probably will find many things that are **NOT WORKING YET**
-
+  
+#
 ### Status
 - setup and compilation is fully working
 - resulting windows executables are running (and optimized as far as I can get)
-- post-install partially implementes with troubles with "**wxpython**" and TCL/TK
+- post-install partially implementes with troubles with "**wxpython**" and TCL/TK <br>
 (see comments in PostInstall.sh and Test_FSLfeeds.sh) <br>
 which is why this project is on **HOLD** for the moment<br>
 maybe this gets resolved at some later point in time <br>
