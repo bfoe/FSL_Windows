@@ -1,4 +1,10 @@
 # FSL_Windows
+
+#
+steps to compile **FSL** (https://fsl.fmrib.ox.ac.uk) under Windows using **MSYS2** (https://www.msys2.org/)
+#
+#
+
 <h3>
 <img src="https://twiki.cern.ch/twiki/pub/IPv6/ResourceRepository/work_in_progress.png" width=10% height=10%>
 this project is highly Work-In-Pogress
@@ -12,10 +18,6 @@ for the moment this project is on hold
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Vienna_Convention_road_sign_B2a.svg/120px-Vienna_Convention_road_sign_B2a.svg.png" width=10% height=10%>
 </h3>
 
-#
-#
-steps to compile **FSL** (https://fsl.fmrib.ox.ac.uk) under Windows using **MSYS2** (https://www.msys2.org/)
-#
 
 ### Install MSYS2/MinGW64
 - download and run the installer from https://www.msys2.org/#installation-prerequisites <br>
